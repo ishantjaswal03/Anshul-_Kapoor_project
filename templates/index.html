@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Maintenance Dashboard | AI Powered</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
+    </div>
+
+    <div class="container">
+        <header class="glass-panel header-panel">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <h1>Manufacturing <span>Intelligence Center</span></h1>
+            </div>
+            <div class="header-actions" style="display: flex; align-items: center; gap: 1rem;">
+                <p>Advanced AI-driven Predictive Maintenance</p>
+                <a href="/logout" class="logout-btn" style="text-decoration: none; color: var(--accent-red); font-weight: 600; border: 1px solid var(--accent-red); padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.3s; justify-content: center; align-items: center; display: flex;">Logout</a>
+            </div>
+        </header>
+
+        <main>
+            <section class="glass-panel input-section">
+                <h2>Machine Telemetry Input</h2>
+                <form id="prediction-form">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label for="machine_id">Machine ID</label>
+                            <select id="machine_id" name="machine_id">
+                                <option value="M001">M001 (CNC Milling)</option>
+                                <option value="M002">M002 (Lathe Machine)</option>
+                                <option value="M003">M003 (Injection Molder)</option>
+                                <option value="M004">M004 (Hydraulic Press)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="temperature">Temperature (°C)</label>
+                            <input type="number" id="temperature" name="temperature" step="0.1" value="70.5" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="vibration">Vibration (mm/s)</label>
+                            <input type="number" id="vibration" name="vibration" step="0.1" value="2.1" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="pressure">Pressure (psi)</label>
+                            <input type="number" id="pressure" name="pressure" step="0.1" value="105" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="rpm">Rotation Speed (RPM)</label>
+                            <input type="number" id="rpm" name="rpm" value="1500" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="power_consumption">Power (kW)</label>
+                            <input type="number" id="power_consumption" name="power_consumption" step="0.1" value="52.3" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="cycle_count">Cycle Count</label>
+                            <input type="number" id="cycle_count" name="cycle_count" value="4500" required>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="operating_hours">Operating Hours</label>
+                            <input type="number" id="operating_hours" name="operating_hours" value="1200" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="analyze-btn" id="analyze-btn">
+                            <span class="btn-text">Run Diagnostics</span>
+                            <div class="spinner loader"></div>
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="glass-panel results-section" id="results-panel">
+                <div class="results-blur-overlay">
+                    <p>Enter data to view real-time predictions</p>
+                </div>
+                
+                <div class="results-content">
+                    <h2>AI Diagnosis Report</h2>
+                    
+                    <div class="status-indicator">
+                        <div class="status-icon" id="status-icon"></div>
+                        <h3 id="status-text">Analyzing...</h3>
+                    </div>
+
+                    <div class="metrics-grid">
+                        <div class="metric-card bg-glass">
+                            <p class="metric-label">Failure Probability</p>
+                            <h4 id="probability-value" class="metric-value">--%</h4>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" id="probability-bar"></div>
+                            </div>
+                        </div>
+
+                        <div class="metric-card bg-glass">
+                            <p class="metric-label">Anomaly Status</p>
+                            <h4 id="anomaly-value" class="metric-value">--</h4>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
