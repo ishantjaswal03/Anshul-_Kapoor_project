@@ -101,38 +101,10 @@ def index():
     plan = users.get(session['username'], {}).get('plan', 'free')
     return render_template('index.html', plan=plan)
 
-@app.route('/checkout', methods=['GET', 'POST'])
-@login_required
-def checkout():
-    if request.method == 'POST':
-        # Simulate payment processing delay & logic
-        users = load_users()
-        username = session['username']
-        
-        if username in users:
-            users[username]['plan'] = 'premium'
-            save_users(users)
-            return jsonify({"status": "success", "message": "Payment verified. You are now Premium!"})
-            
-        return jsonify({"status": "error", "message": "User sequence error"}), 400
-        
-    return render_template('checkout.html')
-
 @app.route('/predict', methods=['POST'])
 @login_required
 def predict():
     try:
-        users = load_users()
-        plan_type = users.get(session['username'], {}).get('plan', 'free')
-
-        # Gatekeeping Free Users
-        if plan_type != 'premium':
-             return jsonify({
-                 "status": "error", 
-                 "message": "Premium Upgrade Required to run AI Diagnostics.",
-                 "code": "REQUIRES_UPGRADE"
-             }), 403
-
         data = request.json
         if not data:
             return jsonify({"status": "error", "message": "No data provided"}), 400

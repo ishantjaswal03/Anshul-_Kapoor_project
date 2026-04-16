@@ -66,13 +66,69 @@ document.getElementById('prediction-form').addEventListener('submit', async (e) 
 
             anomalyValue.innerText = result.anomaly_detected ? "Detected" : "None";
             anomalyValue.style.color = result.anomaly_detected ? "var(--accent-red)" : "var(--accent-green)";
+
+            // Handle Chart Rendering
+            const ctx = document.getElementById('telemetryChart').getContext('2d');
+            if (window.myChartInstance) {
+                window.myChartInstance.destroy();
+            }
+
+            const chartData = {
+                labels: ['Temperature', 'Vibration', 'Pressure'],
+                datasets: [{
+                    label: 'Current Metrics vs Thresholds',
+                    data: [
+                        (data.temperature / 85) * 100, // Normalized to % of critical threshold
+                        (data.vibration / 4.0) * 100,
+                        (data.pressure / 125) * 100
+                    ],
+                    backgroundColor: [
+                        data.temperature > 85 ? 'rgba(239, 68, 68, 0.7)' : 'rgba(16, 185, 129, 0.7)',
+                        data.vibration > 4 ? 'rgba(239, 68, 68, 0.7)' : 'rgba(16, 185, 129, 0.7)',
+                        data.pressure > 125 ? 'rgba(239, 68, 68, 0.7)' : 'rgba(16, 185, 129, 0.7)'
+                    ],
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                    borderWidth: 1
+                }]
+            };
+
+            window.myChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y.toFixed(1) + '% of Critical Level';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 150,
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#94a3b8' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#94a3b8' }
+                        }
+                    }
+                }
+            });
         } else {
+
             alert("Error: " + result.message);
         }
 
     } catch (error) {
         console.error("Prediction error:", error);
-        alert("Failed to connect to AI engine.");
+        alert("Failed to connect to AI engine. Details: " + error.message);
     } finally {
         // Remove loading state
         btn.classList.remove('loading');
